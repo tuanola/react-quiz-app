@@ -38,24 +38,30 @@ const App = () => {
     setLoading(false);
   }
 
-  const checkAnswer = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const processAnswer = (event: React.MouseEvent<HTMLButtonElement>) => {
       if( gameOver ){
           return;
       }
 
+      const answerObject = createAnswerObject(event.currentTarget.value);
+
+      if(answerObject.isCorrect) {
+          setScore( score + 1 );
+      }
+
+      setUserAnswers( [...userAnswers, answerObject]);
+  }
+
+  const createAnswerObject = (answer) => {
       const currentQuestion = questions[number];
-      const answer = event.currentTarget.value;
       const isCorrect = currentQuestion.correct_answer === answer;
 
-      if(isCorrect) setScore( prev => prev + 1 );
-
-      const answerObject = {
+      return {
           question: currentQuestion.question,
           answer,
           isCorrect,
           correctAnswer: currentQuestion.correct_answer,
       }
-      setUserAnswers( prev => [...prev, answerObject]);
   }
 
   const nextQuestion = () => {
@@ -78,7 +84,7 @@ const App = () => {
           { gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
               <NextStepWrapper>
                 <button className="{start-button}" onClick={startQuiz}>
-                    Start
+                    Start New Game
                 </button>
               </NextStepWrapper>
           ) : null }
@@ -91,7 +97,7 @@ const App = () => {
                 question={questions[number].question}
                 answers={questions[number].answers}
                 userAnswer={ userAnswers ? userAnswers[number] : undefined }
-                callback={checkAnswer}
+                callback={processAnswer}
             />
           ) }
           { !gameOver && !loading
