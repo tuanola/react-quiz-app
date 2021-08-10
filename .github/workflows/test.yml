@@ -13,12 +13,10 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
         with:
           node-version: '14'
-          
-      - name: Install
-        run: cd .. npm install    
-          
-      - name: Run test script
-        run: npm run test
+      - run: npm ci
+      - run: npm test
