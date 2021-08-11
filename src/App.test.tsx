@@ -6,7 +6,7 @@ it('renders without crashing', () => {
   render(<App />);
 });
 
-test('renders Quiz header', () => {
+it('renders Quiz header', () => {
   render(<App />);
   const header = screen.getByText(/Quiz/i);
 
